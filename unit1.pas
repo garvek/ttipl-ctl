@@ -26,6 +26,7 @@ type
     Label5: TLabel;
     Label6: TLabel;
     Panel1: TPanel;
+    Shape1: TShape;
     Timer1: TTimer;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -54,10 +55,21 @@ begin
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
+var
+  PowerStatus: Boolean;
 begin
   if FatalError then
      Exit;
-  if CheckBox1.Checked and GetPower() then
+  PowerStatus := GetPower();
+  if PowerStatus then
+  begin
+    Shape1.Brush.Color := clLime;
+  end
+  else
+  begin
+    Shape1.Brush.Color := clBlack;
+  end;
+  if CheckBox1.Checked and PowerStatus then
   begin
     Label5.Caption := GetVoltage();
     Label6.Caption := GetCurrent();

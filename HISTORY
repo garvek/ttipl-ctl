@@ -3,3 +3,6 @@ Version 1
 
 Version 2
 - Fix application freeze when monitoring a wrong COM port
+
+Version 3
+- Add a power status indicator
