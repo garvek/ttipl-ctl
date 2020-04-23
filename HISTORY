@@ -6,3 +6,7 @@ Version 2
 
 Version 3
 - Add a power status indicator
+
+Version 4
+- Improve UI
+- Display Target Voltage and Max Current
