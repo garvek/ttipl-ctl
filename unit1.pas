@@ -14,26 +14,31 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
-    Button1: TButton;
-    Button2: TButton;
-    CheckBox1: TCheckBox;
-    ComboBox1: TComboBox;
-    ComboBox2: TComboBox;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
+    ButtonON: TButton;
+    ButtonOFF: TButton;
+    CheckBoxMonitor: TCheckBox;
+    ComboBoxComPort: TComboBox;
+    ComboBoxPowPort: TComboBox;
+    LabelPortCom: TLabel;
+    LabelPowPort: TLabel;
+    LabelVoltage: TLabel;
+    LabelCurrent: TLabel;
+    LabelVoltageValue: TLabel;
+    LabelCurrentValue: TLabel;
+    LabelTargetVoltage: TLabel;
+    LabelMaxCurrent: TLabel;
     Panel1: TPanel;
-    Shape1: TShape;
+    ShapePowerStatus: TShape;
     Timer1: TTimer;
-    procedure Button1Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
-    procedure ComboBox1Change(Sender: TObject);
-    procedure ComboBox2Change(Sender: TObject);
+    ToggleBoxConnect: TToggleBox;
+    procedure ButtonONClick(Sender: TObject);
+    procedure ButtonOFFClick(Sender: TObject);
+    procedure CheckBoxMonitorChange(Sender: TObject);
+    procedure ComboBoxComPortChange(Sender: TObject);
+    procedure ComboBoxPowPortChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
+    procedure ToggleBoxConnectChange(Sender: TObject);
   private
 
   public
@@ -58,47 +63,86 @@ procedure TForm1.Timer1Timer(Sender: TObject);
 var
   PowerStatus: Boolean;
 begin
-  if FatalError then
-     Exit;
+  if FatalError or not ToggleBoxConnect.Checked then
+  begin
+    ShapePowerStatus.Brush.Color := clGray;
+    LabelVoltageValue.Caption := '-';
+    LabelCurrentValue.Caption := '-';
+    Exit;
+  end;
   PowerStatus := GetPower();
   if PowerStatus then
   begin
-    Shape1.Brush.Color := clLime;
+    ShapePowerStatus.Brush.Color := clLime;
+    if CheckBoxMonitor.Checked then
+    begin
+      LabelVoltageValue.Caption := GetVoltage();
+      LabelCurrentValue.Caption := GetCurrent();
+    end;
   end
   else
   begin
-    Shape1.Brush.Color := clBlack;
-  end;
-  if CheckBox1.Checked and PowerStatus then
-  begin
-    Label5.Caption := GetVoltage();
-    Label6.Caption := GetCurrent();
-  end
-  else
-  begin
-    Label5.Caption := '-';
-    Label6.Caption := '-';
+    ShapePowerStatus.Brush.Color := clBlack;
+    LabelVoltageValue.Caption := '-';
+    LabelCurrentValue.Caption := '-';
   end;
 end;
 
-procedure TForm1.ComboBox1Change(Sender: TObject);
+procedure TForm1.ToggleBoxConnectChange(Sender: TObject);
 begin
-     StrPCopy(ComPort, ComboBox1.Items[ComboBox1.ItemIndex]);
+ if ToggleBoxConnect.Checked = True then
+ begin
+   FatalError := False;
+   ToggleBoxConnect.Caption := 'Disconnect';
+   LabelTargetVoltage.Caption := '(' + GetTargetVoltage() + ')';
+   if not FatalError then
+   begin
+     LabelMaxCurrent.Caption := '(' + GetMaxCurrent() + ')';
+   end;
+   if FatalError then
+   begin
+     LabelTargetVoltage.Caption := '()';
+     LabelMaxCurrent.Caption := '()';
+   end;
+ end
+ else
+ begin
+   ToggleBoxConnect.Caption := 'Connect';
+   LabelTargetVoltage.Caption := '()';
+   LabelMaxCurrent.Caption := '()';
+ end;
 end;
 
-procedure TForm1.ComboBox2Change(Sender: TObject);
+procedure TForm1.ComboBoxComPortChange(Sender: TObject);
 begin
-  PowPort := ComboBox2.ItemIndex;
+  ToggleBoxConnect.Checked := False;
+  StrPCopy(ComPort, ComboBoxComPort.Items[ComboBoxComPort.ItemIndex]);
 end;
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.ComboBoxPowPortChange(Sender: TObject);
 begin
+  ToggleBoxConnect.Checked := False;
+  PowPort := ComboBoxPowPort.ItemIndex;
+end;
+
+procedure TForm1.ButtonONClick(Sender: TObject);
+begin
+  ToggleBoxConnect.Checked := True;
   PowerON();
 end;
 
-procedure TForm1.Button2Click(Sender: TObject);
+procedure TForm1.ButtonOFFClick(Sender: TObject);
 begin
+  ToggleBoxConnect.Checked := True;
   PowerOFF();
+end;
+
+procedure TForm1.CheckBoxMonitorChange(Sender: TObject);
+begin
+  if CheckBoxMonitor.Checked then
+  begin
+    ToggleBoxConnect.Checked := True;
+  end;
 end;
 
 end.

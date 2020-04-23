@@ -6,7 +6,7 @@ unit Unit2;
 interface
 
 uses
-  Classes, SysUtils, Windows, Dialogs;
+  Classes, SysUtils, Windows, Dialogs, StrUtils;
 
 var
   ComPort: array[0..4] of Char = 'COM1';  // COMxx
@@ -18,6 +18,8 @@ procedure PowerOff();
 function GetPower(): Boolean;
 function GetVoltage(): String;
 function GetCurrent(): String;
+function GetTargetVoltage(): String;
+function GetMaxCurrent(): String;
 
 implementation
 
@@ -158,26 +160,48 @@ begin
 end;
 
 function GetVoltage(): String;
-var s, r: string;
+var s: string;
 begin
      s := 'V' + Chr($30 + PowPort) + 'O?';
      OpenCom();
      SendString(s);
      Sleep(100);
-     r := ReceiveString();
-     Result := LeftStr(r, Length(r) - 1);
+     Result := ReceiveString();
      CloseCom();
 end;
 
 function GetCurrent(): String;
-var s, r: string;
+var s: string;
 begin
      s := 'I' + Chr($30 + PowPort) + 'O?';
      OpenCom();
      SendString(s);
      Sleep(100);
+     Result := ReceiveString();
+     CloseCom();
+end;
+
+function GetTargetVoltage(): String;
+var s, r: string;
+begin
+     s := 'V' + Chr($30 + PowPort) + '?';
+     OpenCom();
+     SendString(s);
+     Sleep(100);
      r := ReceiveString();
-     Result := LeftStr(r, Length(r) - 1);
+     Result := MidStr(r, 4, Length(r)-3);
+     CloseCom();
+end;
+
+function GetMaxCurrent(): String;
+var s, r: string;
+begin
+     s := 'I' + Chr($30 + PowPort) + '?';
+     OpenCom();
+     SendString(s);
+     Sleep(100);
+     r := ReceiveString();
+     Result := MidStr(r, 4, Length(r)-3);
      CloseCom();
 end;
 
