@@ -11,6 +11,7 @@ uses
 var
   ComPort: array[0..4] of Char = 'COM1';  // COMxx
   PowPort: Integer = 1;
+  FatalError: Boolean = False;
 
 procedure PowerOn();
 procedure PowerOff();
@@ -30,6 +31,7 @@ var
   CommTimeouts : TCommTimeouts;
 
 begin
+     FatalError := False;
      Device := '\\.\' + ComPort;
      ComFile := CreateFile(Device,
        GENERIC_READ or GENERIC_WRITE,
@@ -40,6 +42,7 @@ begin
        0);
      if ComFile = INVALID_HANDLE_VALUE then
      begin
+        FatalError := True;
         ShowMessage('Cannot open COM port');
         Exit;
      end;
