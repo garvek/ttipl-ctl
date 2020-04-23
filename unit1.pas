@@ -55,6 +55,8 @@ end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
 begin
+  if FatalError then
+     Exit;
   if CheckBox1.Checked and GetPower() then
   begin
     Label5.Caption := GetVoltage();

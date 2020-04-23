@@ -1,2 +1,5 @@
 Version 1
 - First release
+
+Version 2
+- Fix application freeze when monitoring a wrong COM port
