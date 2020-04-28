@@ -10,3 +10,7 @@ Version 3
 Version 4
 - Improve UI
 - Display Target Voltage and Max Current
+
+Version 5
+- Add "stay on top" toggle button
+- Display version

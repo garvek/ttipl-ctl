@@ -9,11 +9,16 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
   Unit2;
 
+const
+
+  VERSION = '1.5';
+
 type
 
   { TForm1 }
 
   TForm1 = class(TForm)
+    ButtonAbout: TButton;
     ButtonON: TButton;
     ButtonOFF: TButton;
     CheckBoxMonitor: TCheckBox;
@@ -30,7 +35,9 @@ type
     Panel1: TPanel;
     ShapePowerStatus: TShape;
     Timer1: TTimer;
+    ToggleBoxStayOnTop: TToggleBox;
     ToggleBoxConnect: TToggleBox;
+    procedure ButtonAboutClick(Sender: TObject);
     procedure ButtonONClick(Sender: TObject);
     procedure ButtonOFFClick(Sender: TObject);
     procedure CheckBoxMonitorChange(Sender: TObject);
@@ -39,6 +46,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure ToggleBoxConnectChange(Sender: TObject);
+    procedure ToggleBoxStayOnTopChange(Sender: TObject);
   private
 
   public
@@ -113,6 +121,18 @@ begin
  end;
 end;
 
+procedure TForm1.ToggleBoxStayOnTopChange(Sender: TObject);
+begin
+  if ToggleBoxStayOnTop.Checked then
+  begin
+    Form1.FormStyle := fsSystemStayOnTop;
+  end
+  else
+  begin
+    Form1.FormStyle := fsNormal;
+  end;
+end;
+
 procedure TForm1.ComboBoxComPortChange(Sender: TObject);
 begin
   ToggleBoxConnect.Checked := False;
@@ -129,6 +149,11 @@ procedure TForm1.ButtonONClick(Sender: TObject);
 begin
   ToggleBoxConnect.Checked := True;
   PowerON();
+end;
+
+procedure TForm1.ButtonAboutClick(Sender: TObject);
+begin
+  ShowMessage('TTI PL Ctl tool V' + VERSION);
 end;
 
 procedure TForm1.ButtonOFFClick(Sender: TObject);

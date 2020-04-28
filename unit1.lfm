@@ -74,7 +74,7 @@ object Form1: TForm1
     Text = '1'
   end
   object ToggleBoxConnect: TToggleBox
-    Left = 192
+    Left = 184
     Height = 24
     Top = 23
     Width = 56
@@ -230,6 +230,34 @@ object Form1: TForm1
     OnChange = CheckBoxMonitorChange
     ParentColor = False
     TabOrder = 5
+  end
+  object ToggleBoxStayOnTop: TToggleBox
+    Left = 256
+    Height = 25
+    Hint = 'Stay on top'
+    Top = 0
+    Width = 27
+    Caption = 'ë'
+    Font.CharSet = SYMBOL_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Webdings'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    OnChange = ToggleBoxStayOnTopChange
+    ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 7
+  end
+  object ButtonAbout: TButton
+    Left = 256
+    Height = 20
+    Top = 168
+    Width = 20
+    Caption = 'i'
+    OnClick = ButtonAboutClick
+    TabOrder = 8
   end
   object Timer1: TTimer
     OnTimer = Timer1Timer
